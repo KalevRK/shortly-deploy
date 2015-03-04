@@ -3,6 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      // options: {
+      //   seperator: ';'
+      // },
+      dist: {
+        src: ['public/client/*.js'],
+        dest: 'public/dist/build.min.js'
+      }
     },
 
     mochaTest: {
@@ -21,6 +28,12 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      my_target: {
+        files: {
+          'public/dist/build.min.js': 'public/dist/build.min.js'
+        }
+      }
+
     },
 
     jshint: {
@@ -38,6 +51,11 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      target: {
+        files: {
+          'public/styles.min.css': 'public/style.css'
+        }
+      }
     },
 
     watch: {
@@ -82,7 +100,7 @@ module.exports = function(grunt) {
     nodemon.stdout.pipe(process.stdout);
     nodemon.stderr.pipe(process.stderr);
 
-    grunt.task.run([ 'watch' ]);
+    grunt.task.run([ 'build','watch' ]);
   });
 
   ////////////////////////////////////////////////////
@@ -94,6 +112,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat',
+    'uglify',
+    'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
