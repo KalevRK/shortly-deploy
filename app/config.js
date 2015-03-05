@@ -5,7 +5,11 @@ var crypto = require('crypto');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
-mongoose.connect('mongodb://localhost:27017/shortly');
+if (process.env.TERM_PROGRAM === 'Apple_Terminal'){
+  mongoose.connect('mongodb://localhost:27017/shortly');
+} else {
+  mongoose.connect('mongodb://MongoLab-2:4YaInOJZtlLHQxt0LfesQAqttboTyheVDDmsaon4yZg-@ds031108.mongolab.com:31108/MongoLab-2');
+}
 
 module.exports.linkSchema = new mongoose.Schema({
   url: String,
