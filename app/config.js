@@ -16,7 +16,7 @@ module.exports.linkSchema = new mongoose.Schema({
   base_url: String,
   code: String,
   title: String,
-  visits: Number,
+  visits: {type: Number, default: 0},
   timestamp: {type: Date, default: Date.now}
 });
 
