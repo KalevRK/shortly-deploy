@@ -4,7 +4,6 @@ var crypto = require('crypto');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 var key = require('./key');
-console.log(key);
 
 if (process.env.TERM_PROGRAM === 'Apple_Terminal'){
   mongoose.connect('mongodb://localhost:27017/shortly');
@@ -17,6 +16,7 @@ module.exports.linkSchema = new mongoose.Schema({
   base_url: String,
   code: String,
   title: String,
+  user: String,
   visits: {type: Number, default: 0},
   timestamp: {type: Date, default: Date.now}
 });
