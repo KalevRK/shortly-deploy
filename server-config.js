@@ -2,10 +2,13 @@ var express = require('express');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var util = require('./lib/utility');
+var passportHandler = require('./lib/passport-handler');
+var passport = require('passport');
 
 var handler = require('./lib/request-handler');
 
 var app = express();
+
 
 app.configure(function() {
   app.set('views', __dirname + '/views');
@@ -15,6 +18,8 @@ app.configure(function() {
   app.use(express.static(__dirname + '/public'));
   app.use(express.cookieParser('shhhh, very secret'));
   app.use(express.session());
+  app.use(passport.initialize());
+  app.use(passport.session());
 });
 
 app.get('/', util.checkUser, handler.renderIndex);
@@ -29,6 +34,9 @@ app.get('/logout', handler.logoutUser);
 
 app.get('/signup', handler.signupUserForm);
 app.post('/signup', handler.signupUser);
+
+app.get('/auth/github', passport.authenticate('github') , function(req, res) {});
+app.get('/auth/github/callback', passport.authenticate('github', {failureRedirect: '/login'}), passportHandler.loginUserCallback);
 
 app.get('/*', handler.navToLink);
 
