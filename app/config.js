@@ -2,19 +2,10 @@ var Bookshelf = require('bookshelf');
 var path = require('path');
 var mongoose = require('mongoose');
 var crypto = require('crypto');
+var bcrypt = require('bcrypt-nodejs');
+var Promise = require('bluebird');
 
 mongoose.connect('mongodb://localhost:27017/shortly');
-// var db = Bookshelf.initialize({
-//   client: 'sqlite3',
-//   connection: {
-//     host: '127.0.0.1',
-//     user: 'your_database_user',
-//     password: 'password',
-//     database: 'shortlydb',
-//     charset: 'utf8',
-//     filename: path.join(__dirname, '../db/shortly.sqlite')
-//   }
-// });
 
 module.exports.linkSchema = new mongoose.Schema({
   // id: Schema.ObjectId,
@@ -33,23 +24,6 @@ module.exports.linkSchema.pre('save', function(next){
   next();
 })
 
-// db.knex.schema.hasTable('urls').then(function(exists) {
-//   if (!exists) {
-//     db.knex.schema.createTable('urls', function (link) {
-//       link.increments('id').primary();
-//       link.string('url', 255);
-//       link.string('base_url', 255);
-//       link.string('code', 100);
-//       link.string('title', 255);
-//       link.integer('visits');
-//       link.timestamps();
-//     }).then(function (table) {
-//       console.log('Created Table', table);
-//     });
-//   }
-// });
-
-
 module.exports.userSchema = new mongoose.Schema({
   // id: Schema.ObjectId,
   username: String,
@@ -57,6 +31,31 @@ module.exports.userSchema = new mongoose.Schema({
   timestamp: {type: Date, default: Date.now}
 });
 
+module.exports.userSchema.pre('save', function(next) {
+  this.comparePassword = 'TACOOOOOO';
+  (function(){
+      var cipher = Promise.promisify(bcrypt.hash);
+      return cipher(this.password, null, null).bind(this)
+        .then(function(hash) {
+          this.password = hash;
+        });
+  })();
+  next();
+});
+
+
+//   comparePassword: function(attemptedPassword, callback) {
+//     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
+//       callback(isMatch);
+//     });
+//   },
+//   hashPassword: function(){
+//     var cipher = Promise.promisify(bcrypt.hash);
+//     return cipher(this.get('password'), null, null).bind(this)
+//       .then(function(hash) {
+//         this.set('password', hash);
+//       });
+//   }
 
 
 // db.knex.schema.hasTable('users').then(function(exists) {

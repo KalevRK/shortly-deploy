@@ -48,7 +48,6 @@ describe('', function() {
             'url': 'http://roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
-            console.log(res.body);
             expect(res.body.url).to.equal('http://roflzoo.com/');
             expect(res.body.code).to.be.ok;
           })
