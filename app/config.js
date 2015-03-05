@@ -4,11 +4,11 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
-
+var key = require('../key');
 if (process.env.TERM_PROGRAM === 'Apple_Terminal'){
   mongoose.connect('mongodb://localhost:27017/shortly');
 } else {
-  mongoose.connect('mongodb://MongoLab-2:4YaInOJZtlLHQxt0LfesQAqttboTyheVDDmsaon4yZg-@ds031108.mongolab.com:31108/MongoLab-2');
+  mongoose.connect(key);
 }
 
 module.exports.linkSchema = new mongoose.Schema({
