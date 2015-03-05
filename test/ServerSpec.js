@@ -11,7 +11,7 @@ var Link = require('../app/models/link');
 // NOTE: these tests are designed for mongo!
 /////////////////////////////////////////////////////
 
-xdescribe('', function() {
+describe('', function() {
 
   beforeEach(function(done) {
     // Log out currently signed in user
@@ -20,7 +20,7 @@ xdescribe('', function() {
       .end(function(err, res) {
 
         // Delete objects from db so they can be created later for the test
-        Link.remove({url : 'http://www.roflzoo.com/'}).exec();
+        Link.remove({url : 'http://roflzoo.com/'}).exec();
         User.remove({username : 'Savannah'}).exec();
         User.remove({username : 'Phillip'}).exec();
 
@@ -45,10 +45,11 @@ xdescribe('', function() {
         request(app)
           .post('/links')
           .send({
-            'url': 'http://www.roflzoo.com/'})
+            'url': 'http://roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
-            expect(res.body.url).to.equal('http://www.roflzoo.com/');
+            console.log(res.body);
+            expect(res.body.url).to.equal('http://roflzoo.com/');
             expect(res.body.code).to.be.ok;
           })
           .end(done);
@@ -58,13 +59,13 @@ xdescribe('', function() {
         request(app)
           .post('/links')
           .send({
-            'url': 'http://www.roflzoo.com/'})
+            'url': 'http://roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
-            Link.findOne({'url' : 'http://www.roflzoo.com/'})
+            Link.findOne({'url' : 'http://roflzoo.com/'})
               .exec(function(err,link){
                 if(err) console.log(err);
-                expect(link.url).to.equal('http://www.roflzoo.com/');
+                expect(link.url).to.equal('http://roflzoo.com/');
               });
           })
           .end(done);
@@ -74,13 +75,13 @@ xdescribe('', function() {
         request(app)
           .post('/links')
           .send({
-            'url': 'http://www.roflzoo.com/'})
+            'url': 'http://roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
-            Link.findOne({'url' : 'http://www.roflzoo.com/'})
+            Link.findOne({'url' : 'http://roflzoo.com/'})
               .exec(function(err,link){
                 if(err) console.log(err);
-                expect(link.title).to.equal('Rofl Zoo - Daily funny animal pictures');
+                expect(link.title).to.equal('Funny animal pictures, funny animals, funniest dogs');
               });
           })
           .end(done);
@@ -92,8 +93,8 @@ xdescribe('', function() {
 
       beforeEach(function(done) {
         link = new Link({
-          url: 'http://www.roflzoo.com/',
-          title: 'Rofl Zoo - Daily funny animal pictures',
+          url: 'http://roflzoo.com/',
+          title: 'Funny animal pictures, funny animals, funniest dogs',
           base_url: 'http://127.0.0.1:4568',
           visits: 0
         })
@@ -108,7 +109,7 @@ xdescribe('', function() {
         request(app)
           .post('/links')
           .send({
-            'url': 'http://www.roflzoo.com/'})
+            'url': 'http://roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
             var secondCode = res.body.code;
@@ -124,7 +125,7 @@ xdescribe('', function() {
           .expect(302)
           .expect(function(res) {
             var redirect = res.headers.location;
-            expect(redirect).to.equal('http://www.roflzoo.com/');
+            expect(redirect).to.equal('http://roflzoo.com/');
           })
           .end(done);
       });
